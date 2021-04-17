@@ -1,9 +1,14 @@
 package ru.netology.diplom.security;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class JwtResponse {
+
     private String token;
 
-    public JwtResponse(String accessToken) {
+    @JsonCreator
+    public JwtResponse(@JsonProperty("auth-token") String accessToken) {
         this.token = accessToken;
     }
 
@@ -14,5 +19,6 @@ public class JwtResponse {
     public void setAccessToken(String accessToken) {
         this.token = accessToken;
     }
+
 
 }

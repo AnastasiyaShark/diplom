@@ -1,6 +1,7 @@
 package ru.netology.diplom.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,11 +31,13 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
-    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/login")
-    public JwtResponse authenticateUser( @RequestBody LoginForm loginRequest) {
+    public JwtResponse authenticateUser(@RequestBody LoginForm loginRequest) {
+
         System.out.println(loginRequest.getLogin()+ " "+ loginRequest.getPassword());
-        System.out.println("HERE1");
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getLogin(),
@@ -45,15 +48,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtProvider.generateJwtToken(authentication);
-        System.out.println("HERE254125");
         return new JwtResponse(jwt);
     }
-    @CrossOrigin(origins = "*")
-    @GetMapping ("/enter")
-    public JwtResponse authenticateUser(  @RequestParam ("login") String login,
-                                          @RequestParam ("pass") String pass) {
-        System.out.println(login + " " + pass);
 
-        return new JwtResponse("hg");
-    }
 }

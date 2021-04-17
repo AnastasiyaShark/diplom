@@ -16,20 +16,21 @@ public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
-
+// /login
     //сгенерировать токен JWT
     public String generateJwtToken(Authentication authentication) {
         //получаем нашего usera в обёртке
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-//        System.out.println(userPrincipal + "nbxvmnhdfxbvn");
         //генерируем токен
-        return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .signWith(
-                        SignatureAlgorithm.HS512,
-                        setSigningKey("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
-                )
-                .compact();
+       String token = Jwts.builder()
+               .setSubject((userPrincipal.getUsername()))
+               .signWith(
+                       SignatureAlgorithm.HS512,
+                       setSigningKey("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
+               )
+               .compact();
+        System.out.println(token);
+        return token;
     }
 
     //анализировать имя пользователя из из проверенного JWT
