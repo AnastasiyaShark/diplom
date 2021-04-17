@@ -1,6 +1,7 @@
-version: '3'
+version: "3.9"
 
 services:
+
   pg_db:
     container_name: d_database
     image: library/postgres:12
@@ -10,4 +11,16 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: D_DB
     ports:
-      - "5400:5432"
+      - 5400:5432
+#  app:
+#    image: 'docker-spring-boot-postgres:latest'
+#    restart: always
+#    container_name: d_backend
+#    build: ./
+#    depends_on:
+#      - pg_db
+#    environment:
+#      DB_PORT: 5432
+#      DB_HOST: d_database
+#      DB_USER: postgres
+#      DB_PASS: 123
