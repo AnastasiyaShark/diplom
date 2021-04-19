@@ -5,9 +5,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.TextCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import ru.netology.diplom.service.SessionService;
 import ru.netology.diplom.service.UserPrinciple;
 
 
@@ -15,28 +17,30 @@ import ru.netology.diplom.service.UserPrinciple;
 public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    private static final String key = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 
-// /login
+    @Autowired
+    SessionService sessionService;
+
+    // /login
     //сгенерировать токен JWT
     public String generateJwtToken(Authentication authentication) {
         //получаем нашего usera в обёртке
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
         //генерируем токен
-       String token = Jwts.builder()
+     return  Jwts.builder()
                .setSubject((userPrincipal.getUsername()))
                .signWith(
                        SignatureAlgorithm.HS512,
-                       setSigningKey("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
+                       setSigningKey(key)
                )
                .compact();
-        System.out.println(token);
-        return token;
     }
 
     //анализировать имя пользователя из из проверенного JWT
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
-                .setSigningKey(setSigningKey("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
+                .setSigningKey(setSigningKey(key))
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
@@ -44,9 +48,8 @@ public class JwtProvider {
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser()
-                    .setSigningKey(setSigningKey("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
+                    .setSigningKey(setSigningKey(key))
                     .parseClaimsJws(authToken);
-//            System.out.println("HERE");
             return true;
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature -> Message: {} ", e);
@@ -64,9 +67,7 @@ public class JwtProvider {
     }
     public byte [] setSigningKey(String base64EncodedKeyBytes) {
         Assert.hasText(base64EncodedKeyBytes, "signing key cannot be null or empty.");
-        byte [] bytes = TextCodec.BASE64.decode(base64EncodedKeyBytes);
-//        System.out.println(bytes);
-        return bytes;
+        return TextCodec.BASE64.decode(base64EncodedKeyBytes);
     }
 
 

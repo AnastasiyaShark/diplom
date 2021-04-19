@@ -21,7 +21,7 @@ public class UserPrinciple implements UserDetails {
     private final String password;
 
 
-    public UserPrinciple(int id, String login,String password) {
+    public UserPrinciple(int id, String login, String password) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -34,7 +34,6 @@ public class UserPrinciple implements UserDetails {
                 user.getPassword()
         );
     }
-
 
 
     @Override
@@ -81,74 +80,5 @@ public class UserPrinciple implements UserDetails {
         UserPrinciple user = (UserPrinciple) o;
         return Objects.equals(id, user.id);
     }
-
-
-
-
-
-
-//    private static final long serialVersionUID = 1L;
-//    private final int id;
-//    private final String login;
-//    @JsonIgnore
-//    private final String password;
-//
-//
-//    public UserPrinciple(int id, String login, String password) {
-//        this.id = id;
-//        this.login = login;
-//        this.password = password;
-//    }
-//
-//    public static UserPrinciple build(User user) {
-//        return new UserPrinciple(
-//                user.getId(),
-//                user.getLogin(),
-//                user.getPassword());
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public String getLogin() {
-//        return login;
-//    }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return null;
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return login;
-//    }
-////Срок действия аккаунта не истек
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-////Аккаунт не заблокирован
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-////Срок действия учетных данных не истек
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-////включен
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
-
 
 }

@@ -1,5 +1,6 @@
 package ru.netology.diplom.security;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -26,6 +28,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -34,35 +37,34 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         try {
             //получаем токен JWT из заголовка request'a с помощью метода gerJwt
             String jwt = getJwt(request);
-//            System.out.println(request + "WOOOORK");
             //проверяем JWT помощью метода validateJwtToken() из класса JWTProvider
-            if (jwt!=null && tokenProvider.validateJwtToken(jwt)) {
+            if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
                 String username = tokenProvider.getUserNameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
         } catch (Exception e) {
             logger.error("Can NOT set user authentication -> Message: {}", e);
         }
-
         filterChain.doFilter(request, response);
     }
 
-//метод для получения токен JWT из заголовка request'a
+    //метод для получения токен JWT из заголовка request'a
     private String getJwt(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-
+        String authHeader = request.getHeader("auth-token");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-           return authHeader.replace("Bearer ","");
+            return authHeader.replace("Bearer ", "");
         }
-
         return null;
     }
-//2021/04/16
+}
+
+
+//деактивирует фильтр
 //    private static final String LOGIN_URL = "/login";
 //    @Override
 //    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -73,4 +75,3 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 //        }
 //        return false;
 //    }
-}
