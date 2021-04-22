@@ -41,17 +41,6 @@ import javax.servlet.MultipartConfigElement;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-//    @Bean
-//    MultipartConfigElement multipartConfigElement() {
-//        MultipartConfigFactory factory = new MultipartConfigFactory();
-////        factory.setMaxFileSize(128);
-////        factory.setMaxRequestSize("128KB");
-//        return factory.createMultipartConfig();
-//    }
-
-
-
-
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
     @Autowired

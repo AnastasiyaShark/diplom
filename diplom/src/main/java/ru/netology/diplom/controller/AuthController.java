@@ -16,9 +16,9 @@ import ru.netology.diplom.exeption.ErrorUnauthorized;
 import ru.netology.diplom.model.Session;
 import ru.netology.diplom.repository.UserRepository;
 import ru.netology.diplom.security.JwtAuthTokenFilter;
-import ru.netology.diplom.security.JwtResponse;
+import ru.netology.diplom.model.JwtResponse;
 import ru.netology.diplom.security.JwtProvider;
-import ru.netology.diplom.security.LoginForm;
+import ru.netology.diplom.model.LoginForm;
 import ru.netology.diplom.service.SessionService;
 
 
@@ -96,6 +96,8 @@ public class AuthController {
     public ResponseEntity<String> errorUnauthorized(ErrorUnauthorized e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+
+
 
 
 }

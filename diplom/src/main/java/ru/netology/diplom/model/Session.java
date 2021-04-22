@@ -2,7 +2,6 @@ package ru.netology.diplom.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.netology.diplom.security.JwtResponse;
 
 @Getter
 @Setter

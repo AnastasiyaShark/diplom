@@ -14,30 +14,34 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String originalName;
+    private String generatedName;
     //путь к файлу на сервере
     private String path;
+    private int size;
     private String usersLogin;
 
 
-    public File(Integer id, String name, String path,String usersLogin) {//
+    public File(Integer id, String originalName, String generatedName, String path, int size, String usersLogin) {
         this.id = id;
-        this.name = name;
+        this.originalName = originalName;
+        this.generatedName = generatedName;
         this.path = path;
+        this.size = size;
         this.usersLogin = usersLogin;
-
     }
 
     public File() {
     }
 
-
     @Override
     public String toString() {
         return "File{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", originalName='" + originalName + '\'' +
+                ", generatedName='" + generatedName + '\'' +
                 ", path='" + path + '\'' +
+                ", size=" + size +
                 ", usersLogin='" + usersLogin + '\'' +
                 '}';
     }

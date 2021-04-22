@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.netology.diplom.model.Session;
 import ru.netology.diplom.repository.SessionRepository;
-import ru.netology.diplom.security.JwtResponse;
 
 import java.util.List;
 
@@ -39,6 +38,10 @@ public class SessionService {
 
     public Session getSessionByToken(String token) {
        return sessionRepository.getSessionByToken(token);
+    }
+
+    public String getUserNameByToken (String token){
+      return   sessionRepository.getUserNameByToken(token);
     }
 
 

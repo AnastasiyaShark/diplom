@@ -2,7 +2,6 @@ package ru.netology.diplom.repository;
 
 import org.springframework.stereotype.Component;
 import ru.netology.diplom.model.Session;
-import ru.netology.diplom.security.JwtResponse;
 
 import java.util.List;
 import java.util.Vector;
@@ -61,6 +60,16 @@ public class SessionRepository {
             }
         }
         return null;
+    }
+
+    public String getUserNameByToken (String token){
+        for (Session session : sessionsRepository) {
+            if (session.getToken().equals(token)) {
+                return session.getLogin();
+            }
+        }
+        return null;
+
     }
 
     @Override
