@@ -18,7 +18,7 @@ import ru.netology.diplom.repository.UserRepository;
 @Service
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
 
     @Autowired
     UserRepository userRepository;

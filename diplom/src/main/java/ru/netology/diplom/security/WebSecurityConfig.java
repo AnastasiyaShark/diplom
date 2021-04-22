@@ -1,9 +1,12 @@
 package ru.netology.diplom.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,6 +30,8 @@ import ru.netology.diplom.repository.UserRepository;
 
 import ru.netology.diplom.service.UserDetailsServiceImpl;
 
+import javax.servlet.MultipartConfigElement;
+
 
 @Configuration
 @EnableWebSecurity//позволяет Spring находить и автоматически применять класс к глобальной веб-безопасности.
@@ -34,6 +39,18 @@ import ru.netology.diplom.service.UserDetailsServiceImpl;
         prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+//    @Bean
+//    MultipartConfigElement multipartConfigElement() {
+//        MultipartConfigFactory factory = new MultipartConfigFactory();
+////        factory.setMaxFileSize(128);
+////        factory.setMaxRequestSize("128KB");
+//        return factory.createMultipartConfig();
+//    }
+
+
+
 
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
@@ -95,5 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
+
 
 }

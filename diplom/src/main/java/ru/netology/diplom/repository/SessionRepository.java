@@ -45,7 +45,14 @@ public class SessionRepository {
         }
         return false;
     }
-
+    public String getLoginByToken(String token) {
+        for (Session session : sessionsRepository) {
+            if (session.getToken().equals(token)) {
+                return session.getLogin();
+            }
+        }
+        return null;
+    }
 
     public Session getSessionByToken(String token) {
         for (Session session : sessionsRepository) {

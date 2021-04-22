@@ -15,6 +15,11 @@ public class SessionService {
     @Autowired
     SessionRepository sessionRepository;
 
+
+    public String getLoginByToken(String token) {
+       return sessionRepository.getLoginByToken(token);
+    }
+
     public void saveSession(Session session) {
         sessionRepository.saveSession(session);
     }
@@ -34,5 +39,10 @@ public class SessionService {
 
     public Session getSessionByToken(String token) {
        return sessionRepository.getSessionByToken(token);
+    }
+
+
+    public boolean checkSessionByToken(String token) {
+       return sessionRepository.checkSessionByToken(token);
     }
 }
