@@ -3,14 +3,18 @@ package ru.netology.diplom.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.diplom.exeption.ErrorInputData;
 import ru.netology.diplom.exeption.ErrorUnauthorized;
+import ru.netology.diplom.exeption.InternalServerError;
 import ru.netology.diplom.model.File;
 import ru.netology.diplom.model.ListResponse;
 import ru.netology.diplom.repository.FileRepository;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -34,15 +38,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Autowired
     SessionService sessionService;
 
+
     @Override
     public void upload(MultipartFile file, HttpServletRequest request) {
 
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
         String generatedName = date + file.getOriginalFilename();
-        String directoryName = "D:\\Java\\Netology\\Laxor\\Diplom\\Back\\diplom\\uploads\\";
+        String directoryName = "D:\\Java\\Netology\\Laxor\\Diplom\\Back\\diplom\\img\\" + generatedName;
 
         try {
-            Files.copy(file.getInputStream(), Paths.get(directoryName), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             throw new ErrorInputData("Error input data");
         }
@@ -50,12 +55,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         String authHeader = request.getHeader("auth-token");
         String newAuthHeader = authHeader.replace("Bearer ", "");
 
-        linkingAndSavingFile(file.getOriginalFilename(),generatedName, directoryName, (int) file.getSize(),
+        linkingAndSavingFile(file.getOriginalFilename(), generatedName, directoryName, (int) file.getSize(),
                 sessionService.getLoginByToken(newAuthHeader));
     }
 
     //компоновка и сохранение файла в бд
-    public void linkingAndSavingFile(String originalName,String generatedName, String path,
+    public void linkingAndSavingFile(String originalName, String generatedName, String path,
                                      int size, String userLogin) {
         File newFile = new File();
         newFile.setOriginalName(originalName);
@@ -65,6 +70,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         newFile.setUsersLogin(userLogin);
         fileRepository.save(newFile);
     }
+
 
     @Override
     public List<ListResponse> getAll(int limit, HttpServletRequest request) {
@@ -76,14 +82,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         List<ListResponse> newList = new ArrayList<>();
         for (File file : allFile) {
             if (file.getUsersLogin().equals(userName)) {
-                newList.add(new ListResponse(file.getOriginalName(), file.getSize()));
+                newList.add(new ListResponse(file.getGeneratedName(), file.getSize()));
             }
         }
         return newList;
     }
 
+
     @Override
     public void delete(String fileName) {
+        fileRepository.deleteFileByGeneratedName(fileName);
 
     }
 }
