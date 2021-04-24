@@ -3,18 +3,14 @@ package ru.netology.diplom.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.diplom.exeption.ErrorInputData;
-import ru.netology.diplom.exeption.ErrorUnauthorized;
-import ru.netology.diplom.exeption.InternalServerError;
 import ru.netology.diplom.model.File;
 import ru.netology.diplom.model.ListResponse;
+import ru.netology.diplom.model.RequestNewName;
 import ru.netology.diplom.repository.FileRepository;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,11 +19,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
-
+    String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
     private final FileRepository fileRepository;
 
     @Autowired
@@ -42,9 +39,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void upload(MultipartFile file, HttpServletRequest request) {
 
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
+
         String generatedName = date + file.getOriginalFilename();
-        String directoryName = "D:\\Java\\Netology\\Laxor\\Diplom\\Back\\diplom\\img\\" + generatedName;
+        String directoryName = "D:\\Java\\Netology\\Laxor\\Diplom\\Back\\diplom\\diplom\\img\\" ;//+ generatedName
 
         try {
             Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
@@ -92,6 +89,26 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void delete(String fileName) {
         fileRepository.deleteFileByGeneratedName(fileName);
+
+    }
+
+
+   @Override
+    public Optional<File> load(String fileName)  {
+
+       return fileRepository.findFileByGeneratedName(fileName);
+   }
+
+
+    @Override
+    public void changeFileName(String fileName, RequestNewName name) {
+        Optional<File> file = fileRepository.findFileByGeneratedName(fileName);
+        File newFile = file.get();
+        newFile.setOriginalName(name.getFilename());
+        newFile.setGeneratedName(date + name.getFilename());
+        fileRepository.save(newFile);
+        fileRepository.deleteFileByGeneratedName(fileName);
+
 
     }
 }

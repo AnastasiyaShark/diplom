@@ -11,12 +11,15 @@ import ru.netology.diplom.model.File;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface FileRepository extends JpaRepository<File, Integer> {
 
+    Optional<File> findFileByGeneratedName(String name);
 
     @Transactional
-    void deleteFileByGeneratedName (String name);
+    void deleteFileByGeneratedName(String name);
+
 }
