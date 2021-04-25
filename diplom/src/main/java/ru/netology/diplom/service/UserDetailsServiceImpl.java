@@ -1,6 +1,7 @@
 package ru.netology.diplom.service;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,11 +17,10 @@ import ru.netology.diplom.repository.UserRepository;
 //ищем пр login
 @Service
 @Component
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-
-    @Autowired
-    UserRepository userRepository;
+   private final UserRepository userRepository;
 
     @Override
     @Transactional

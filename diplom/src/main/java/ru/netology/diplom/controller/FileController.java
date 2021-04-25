@@ -1,6 +1,7 @@
 package ru.netology.diplom.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -24,14 +25,12 @@ import java.nio.file.Files;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @RestController
 public class FileController {
-    @Autowired
-    FilesStorageService storageService;
 
-    @Autowired
-    SessionService sessionService;
+    private final FilesStorageService storageService;
+    private final SessionService sessionService;
 
 
     @PostMapping("/file")
@@ -48,7 +47,7 @@ public class FileController {
                                            HttpServletRequest request) {
         return storageService.getAll(limit, request);
     }
-//    @Transactional
+
 
     @DeleteMapping("/file")
     public ResponseEntity deleteFile(@RequestParam("filename") String filename) {

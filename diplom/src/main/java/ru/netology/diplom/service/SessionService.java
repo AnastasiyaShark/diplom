@@ -1,7 +1,7 @@
 package ru.netology.diplom.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.netology.diplom.model.Session;
 import ru.netology.diplom.repository.SessionRepository;
@@ -9,10 +9,10 @@ import ru.netology.diplom.repository.SessionRepository;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class SessionService {
 
-    @Autowired
-    SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
 
 
     public String getLoginByToken(String token) {

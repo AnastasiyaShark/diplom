@@ -3,6 +3,7 @@ package ru.netology.diplom.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.TextCodec;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,14 @@ import org.springframework.util.Assert;
 import ru.netology.diplom.service.SessionService;
 import ru.netology.diplom.service.UserPrinciple;
 
-
+@RequiredArgsConstructor
 @Component
 public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private static final String key = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 
-    @Autowired
-    SessionService sessionService;
+    private final SessionService sessionService;
 
     // /login
     //сгенерировать токен JWT

@@ -1,5 +1,6 @@
 package ru.netology.diplom.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -27,19 +28,15 @@ import java.util.Optional;
 
 @Component
 @Service
+@RequiredArgsConstructor
 public class FilesStorageServiceImpl implements FilesStorageService {
-    String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
-    private final FileRepository fileRepository;
-
-    @Autowired
-    public FilesStorageServiceImpl(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
-
-    @Autowired
-    SessionService sessionService;
 
     public String directoryName = "diplom/src/main/resources/img/";
+    public String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
+
+    private final FileRepository fileRepository;
+    private final SessionService sessionService;
+
 
     @Override
     public void chekAndCreateFolder() {

@@ -1,5 +1,6 @@
 package ru.netology.diplom.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,74 +20,28 @@ import ru.netology.diplom.security.JwtAuthTokenFilter;
 import ru.netology.diplom.model.JwtResponse;
 import ru.netology.diplom.security.JwtProvider;
 import ru.netology.diplom.model.LoginForm;
+import ru.netology.diplom.service.AuthService;
 import ru.netology.diplom.service.FilesStorageService;
 import ru.netology.diplom.service.SessionService;
 
 
 import javax.servlet.http.HttpServletRequest;
 
-
+@RequiredArgsConstructor
 @RestController
 public class AuthController {
 
-    @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UserRepository userRepository;
-
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtProvider jwtProvider;
-
-    @Autowired
-    JwtAuthTokenFilter jwtAuthTokenFilter;
-
-    @Autowired
-    FilesStorageService storageService;
-
+private final AuthService authService;
 
     @PostMapping("/login")
     public JwtResponse authenticateUser(@RequestBody LoginForm loginRequest) {
-        //конвертирует user'a
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getLogin(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        //получаем токен
-        String jwt = jwtProvider.generateJwtToken(authentication);
-
-        Session newSession = new Session(loginRequest.getLogin(), jwt);
-
-        //проверяем,есть ли уже такая сессия (login and token)
-        if (!sessionService.checkSessionRepository(newSession)) {
-            throw new ErrorInputData(String.format(
-                    "Невозможно войти! Сессия для пользователя с login = %s уже существует", loginRequest.getLogin()));
-        }
-        //сохраняем сессию
-        sessionService.saveSession(newSession);
-        System.out.println(sessionService.getAll());
-        storageService.chekAndCreateFolder();
-        return new JwtResponse(jwt);
+       return authService.authenticateUser(loginRequest);
     }
 
 
     @PostMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request) {
-        String authHeader = request.getHeader("auth-token");
-        String newAuthHeader = authHeader.replace("Bearer ", "");
-        sessionService.deleteSession(sessionService.getSessionByToken(newAuthHeader));
-        System.out.println(sessionService.getAll());
-        return ResponseEntity.ok().body("Success logout");
+        return authService.logout(request);
 
     }
 
