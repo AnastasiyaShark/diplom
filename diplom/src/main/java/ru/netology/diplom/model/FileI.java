@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "Files")
-public class File {
+public class FileI {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class File {
     private String usersLogin;
 
 
-    public File(Integer id, String originalName, String generatedName, String path, int size, String usersLogin) {
+    public FileI(Integer id, String originalName, String generatedName, String path, int size, String usersLogin) {
         this.id = id;
         this.originalName = originalName;
         this.generatedName = generatedName;
@@ -31,7 +31,7 @@ public class File {
         this.usersLogin = usersLogin;
     }
 
-    public File() {
+    public FileI() {
     }
 
     @Override
