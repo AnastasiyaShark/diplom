@@ -13,8 +13,8 @@ import ru.netology.diplom.repository.FileRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.net.URI;
-import java.net.URL;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -38,19 +38,28 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Autowired
     SessionService sessionService;
 
+    public  String directoryName = "diplom/src/main/resources/img/";
+
+    @Override
+    public void chekAndCreateFolder (){
+        if (!Files.exists(Paths.get(directoryName))) {
+            try {
+                Files.createDirectory(Paths.get(directoryName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     @Override
     public void upload(MultipartFile file, HttpServletRequest request) {
-
-
         String generatedName = date + file.getOriginalFilename();
-
-        String directoryName = "diplom/src/main/resources/img/";
-        try {
+        try{
             Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) {
-            throw new ErrorInputData("Error input data");
-        }
+        } catch(Exception e){
+        throw new ErrorInputData("Error input data");
+    }
 
         String authHeader = request.getHeader("auth-token");
         String newAuthHeader = authHeader.replace("Bearer ", "");
@@ -58,7 +67,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         linkingAndSavingFile(file.getOriginalFilename(), generatedName, directoryName, (int) file.getSize(),
                 sessionService.getLoginByToken(newAuthHeader));
     }
-
 
 
     //компоновка и сохранение файла в бд
@@ -96,14 +104,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
 
-        deleteFileFromFolder(fileI.getPath()+fileName);
+        deleteFileFromFolder(fileI.getPath() + fileName);
         fileRepository.deleteFileByGeneratedName(fileName);
 
     }
 
 
     @Override
-    public Optional<FileI> load(String fileName)  {
+    public Optional<FileI> load(String fileName) {
 
         return fileRepository.findFileByGeneratedName(fileName);
     }
@@ -112,38 +120,38 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void changeFileName(String fileName, RequestNewName name) {
         Optional<FileI> file = fileRepository.findFileByGeneratedName(fileName);
-        String oldPath = file.get().getPath()+file.get().getGeneratedName();
+        String oldPath = file.get().getPath() + file.get().getGeneratedName();
 
         FileI newFile = file.get();
         newFile.setOriginalName(name.getFilename());
         newFile.setGeneratedName(date + name.getFilename());
         fileRepository.save(newFile);
 
-        String newPath = newFile.getPath()+newFile.getGeneratedName();
-        renameFileInFolder(oldPath,newPath);
+        String newPath = newFile.getPath() + newFile.getGeneratedName();
+        renameFileInFolder(oldPath, newPath);
 
         fileRepository.deleteFileByGeneratedName(fileName);
 
 
     }
 
-    public void deleteFileFromFolder (String path){
+    public void deleteFileFromFolder(String path) {
 
         File file = new File((path));
-        if (file.exists()){
+        if (file.exists()) {
             file.delete();
-        }else {
-            throw new ErrorInputData("File " +  path + "does not exist");
+        } else {
+            throw new ErrorInputData("File " + path + "does not exist");
         }
     }
 
-    public void renameFileInFolder (String oldPath,String newPath){
+    public void renameFileInFolder(String oldPath, String newPath) {
 
         File file = new File(oldPath);
-        if (file.exists()){
+        if (file.exists()) {
             file.renameTo(new File(newPath));
-        }else {
-            throw new ErrorInputData("File " +  oldPath + "does not exist");
+        } else {
+            throw new ErrorInputData("File " + oldPath + "does not exist");
         }
     }
 }

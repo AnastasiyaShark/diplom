@@ -19,6 +19,7 @@ import ru.netology.diplom.security.JwtAuthTokenFilter;
 import ru.netology.diplom.model.JwtResponse;
 import ru.netology.diplom.security.JwtProvider;
 import ru.netology.diplom.model.LoginForm;
+import ru.netology.diplom.service.FilesStorageService;
 import ru.netology.diplom.service.SessionService;
 
 
@@ -47,6 +48,9 @@ public class AuthController {
     @Autowired
     JwtAuthTokenFilter jwtAuthTokenFilter;
 
+    @Autowired
+    FilesStorageService storageService;
+
 
     @PostMapping("/login")
     public JwtResponse authenticateUser(@RequestBody LoginForm loginRequest) {
@@ -71,6 +75,7 @@ public class AuthController {
         //сохраняем сессию
         sessionService.saveSession(newSession);
         System.out.println(sessionService.getAll());
+        storageService.chekAndCreateFolder();
         return new JwtResponse(jwt);
     }
 

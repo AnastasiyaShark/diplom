@@ -20,5 +20,6 @@ public interface FilesStorageService {
     void changeFileName(String fileName, RequestNewName name);
 
     List<ListResponse> getAll(int limit, HttpServletRequest request);
+   void chekAndCreateFolder ();
 
 }
