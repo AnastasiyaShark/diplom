@@ -13,6 +13,8 @@ import ru.netology.diplom.repository.FileRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -42,8 +44,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
 
         String generatedName = date + file.getOriginalFilename();
-        String directoryName = "D:\\Java\\Netology\\Laxor\\Diplom\\Back\\diplom\\diplom\\img\\" ;//+ generatedName
 
+        String directoryName = "diplom/src/main/resources/img/";
         try {
             Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
@@ -56,6 +58,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         linkingAndSavingFile(file.getOriginalFilename(), generatedName, directoryName, (int) file.getSize(),
                 sessionService.getLoginByToken(newAuthHeader));
     }
+
+
 
     //компоновка и сохранение файла в бд
     public void linkingAndSavingFile(String originalName, String generatedName, String path,
