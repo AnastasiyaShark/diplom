@@ -76,10 +76,8 @@ public class FileController {
 
     @PutMapping("/file")
     public ResponseEntity edit (@RequestParam("filename") String fileName,
-                                @RequestBody RequestNewName filename) {
-        String m = filename.getFilename();
-        System.out.println("name" + "       "+ m);
-        storageService.changeFileName(fileName,filename);
+                                @RequestBody RequestNewName newName) {
+        storageService.changeFileName(fileName,newName);
         return ResponseEntity.ok().body("Success upload");
     }
 

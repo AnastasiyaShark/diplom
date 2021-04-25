@@ -8,10 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestNewName {
+
     private String filename;
 
     @JsonCreator
-    public RequestNewName(@JsonProperty("name") String filename) {
+    public RequestNewName(@JsonProperty("filename") String filename) {
         this.filename = filename;
     }
 

@@ -108,7 +108,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         newFile.setGeneratedName(date + name.getFilename());
         fileRepository.save(newFile);
         fileRepository.deleteFileByGeneratedName(fileName);
-
+newFile.getUsersLogin();
 
     }
 }
