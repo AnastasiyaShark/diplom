@@ -28,13 +28,13 @@ public class JwtProvider {
         //получаем нашего usera в обёртке
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
         //генерируем токен
-     return  Jwts.builder()
-               .setSubject((userPrincipal.getUsername()))
-               .signWith(
-                       SignatureAlgorithm.HS512,
-                       setSigningKey(key)
-               )
-               .compact();
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .signWith(
+                        SignatureAlgorithm.HS512,
+                        setSigningKey(key)
+                )
+                .compact();
     }
 
     //анализировать имя пользователя из из проверенного JWT
@@ -44,6 +44,7 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
+
     //проверить токен JWT
     public boolean validateJwtToken(String authToken) {
         try {
@@ -65,7 +66,8 @@ public class JwtProvider {
 
         return false;
     }
-    public byte [] setSigningKey(String base64EncodedKeyBytes) {
+
+    public byte[] setSigningKey(String base64EncodedKeyBytes) {
         Assert.hasText(base64EncodedKeyBytes, "signing key cannot be null or empty.");
         return TextCodec.BASE64.decode(base64EncodedKeyBytes);
     }

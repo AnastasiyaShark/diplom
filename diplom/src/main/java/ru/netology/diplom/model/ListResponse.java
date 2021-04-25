@@ -14,8 +14,8 @@ public class ListResponse {
     private int size;
 
     @JsonCreator
-    public ListResponse( @JsonProperty("filename") String originalFileName,
-                         @JsonProperty(value = "size") int size) {
+    public ListResponse(@JsonProperty("filename") String originalFileName,
+                        @JsonProperty(value = "size") int size) {
         this.fileName = originalFileName;
         this.size = size;
     }

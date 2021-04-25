@@ -16,6 +16,7 @@ import java.io.File;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
@@ -38,10 +39,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Autowired
     SessionService sessionService;
 
-    public  String directoryName = "diplom/src/main/resources/img/";
+    public String directoryName = "diplom/src/main/resources/img/";
 
     @Override
-    public void chekAndCreateFolder (){
+    public void chekAndCreateFolder() {
         if (!Files.exists(Paths.get(directoryName))) {
             try {
                 Files.createDirectory(Paths.get(directoryName));
@@ -55,11 +56,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void upload(MultipartFile file, HttpServletRequest request) {
         String generatedName = date + file.getOriginalFilename();
-        try{
+        try {
             Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
-        } catch(Exception e){
-        throw new ErrorInputData("Error input data");
-    }
+        } catch (Exception e) {
+            throw new ErrorInputData("Error input data");
+        }
 
         String authHeader = request.getHeader("auth-token");
         String newAuthHeader = authHeader.replace("Bearer ", "");
@@ -109,11 +110,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     }
 
-
     @Override
-    public Optional<FileI> load(String fileName) {
-
-        return fileRepository.findFileByGeneratedName(fileName);
+    public Path load(String fileName) {
+        FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
+        Path path = Paths.get(fileI.getPath() + fileI.getGeneratedName());
+        return path;
     }
 
 

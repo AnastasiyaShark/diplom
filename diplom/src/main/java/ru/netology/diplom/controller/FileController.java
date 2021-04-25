@@ -2,7 +2,9 @@ package ru.netology.diplom.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import ru.netology.diplom.exeption.InternalServerError;
-import ru.netology.diplom.model.FileI;
+
 import ru.netology.diplom.model.ListResponse;
 import ru.netology.diplom.model.RequestNewName;
 import ru.netology.diplom.service.FilesStorageService;
@@ -19,11 +21,10 @@ import ru.netology.diplom.service.SessionService;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
 
-//@Transactional
+import java.util.List;
+
+
 @RestController
 public class FileController {
     @Autowired
@@ -37,7 +38,6 @@ public class FileController {
     public ResponseEntity upload(@RequestParam("filename") String fileName,
                                  @RequestParam("file") MultipartFile file,
                                  HttpServletRequest request) {
-
 
         storageService.upload(file, request);
         return ResponseEntity.ok().body("Success uploads");
@@ -58,29 +58,23 @@ public class FileController {
     }
 
 
-
-
     @GetMapping("/file")
-    public ResponseEntity downloadFile(@RequestParam("filename") String fileName,
-                                               HttpServletRequest request) throws IOException {
+    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String fileName) throws IOException {
 
-        Optional<FileI> fileOptional = storageService.load(fileName);
-        byte [] bytes =  Files.readAllBytes(Paths.get(fileOptional.get().getPath()+fileOptional.get().getGeneratedName()));
-        FileI fileI = fileOptional.get();
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(storageService.load(fileName)));
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileI.getGeneratedName() + "\"")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(bytes);
+                .body(resource);
     }
+
 
     @PutMapping("/file")
-    public ResponseEntity edit (@RequestParam("filename") String fileName,
-                                @RequestBody RequestNewName newName) {
-        storageService.changeFileName(fileName,newName);
+    public ResponseEntity edit(@RequestParam("filename") String fileName,
+                               @RequestBody RequestNewName newName) {
+        storageService.changeFileName(fileName, newName);
         return ResponseEntity.ok().body("Success upload");
     }
-
 
 
     @ExceptionHandler(InternalServerError.class)

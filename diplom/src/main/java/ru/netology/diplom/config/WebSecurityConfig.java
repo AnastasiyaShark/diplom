@@ -1,20 +1,19 @@
 package ru.netology.diplom.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
+
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,9 +34,7 @@ import ru.netology.diplom.security.AuthEntryPointJwt;
 import ru.netology.diplom.security.JwtAuthTokenFilter;
 import ru.netology.diplom.service.UserDetailsServiceImpl;
 
-import javax.servlet.MultipartConfigElement;
 
-//@EnableTransactionManagement
 @Configuration
 @EnableWebSecurity//позволяет Spring находить и автоматически применять класс к глобальной веб-безопасности.
 @EnableGlobalMethodSecurity(
@@ -45,13 +42,6 @@ import javax.servlet.MultipartConfigElement;
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-//    @Bean
-//    JpaTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//        return transactionManager;
-//    }
 
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
@@ -115,9 +105,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     }
-
-
-
 
 
 }

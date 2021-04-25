@@ -69,8 +69,8 @@ public class AuthController {
 
         //проверяем,есть ли уже такая сессия (login and token)
         if (!sessionService.checkSessionRepository(newSession)) {
-           throw new ErrorInputData(String.format(
-                   "Невозможно войти! Сессия для пользователя с login = %s уже существует",loginRequest.getLogin()));
+            throw new ErrorInputData(String.format(
+                    "Невозможно войти! Сессия для пользователя с login = %s уже существует", loginRequest.getLogin()));
         }
         //сохраняем сессию
         sessionService.saveSession(newSession);
@@ -80,11 +80,10 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request) {
         String authHeader = request.getHeader("auth-token");
-        String newAuthHeader =  authHeader.replace("Bearer ", "");
+        String newAuthHeader = authHeader.replace("Bearer ", "");
         sessionService.deleteSession(sessionService.getSessionByToken(newAuthHeader));
         System.out.println(sessionService.getAll());
         return ResponseEntity.ok().body("Success logout");
@@ -101,8 +100,6 @@ public class AuthController {
     public ResponseEntity<String> errorUnauthorized(ErrorUnauthorized e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
-
-
 
 
 }

@@ -44,6 +44,7 @@ public class SessionRepository {
         }
         return false;
     }
+
     public String getLoginByToken(String token) {
         for (Session session : sessionsRepository) {
             if (session.getToken().equals(token)) {
@@ -62,7 +63,7 @@ public class SessionRepository {
         return null;
     }
 
-    public String getUserNameByToken (String token){
+    public String getUserNameByToken(String token) {
         for (Session session : sessionsRepository) {
             if (session.getToken().equals(token)) {
                 return session.getLogin();

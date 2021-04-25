@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 public class CloudStorageApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CloudStorageApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CloudStorageApplication.class, args);
+    }
 
 }

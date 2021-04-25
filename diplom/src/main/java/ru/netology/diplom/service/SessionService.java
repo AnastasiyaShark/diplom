@@ -16,7 +16,7 @@ public class SessionService {
 
 
     public String getLoginByToken(String token) {
-       return sessionRepository.getLoginByToken(token);
+        return sessionRepository.getLoginByToken(token);
     }
 
     public void saveSession(Session session) {
@@ -24,28 +24,24 @@ public class SessionService {
     }
 
     public boolean checkSessionRepository(Session session) {
-       return sessionRepository.checkSessionRepository(session);
+        return sessionRepository.checkSessionRepository(session);
     }
 
-    public void deleteSession (Session session){
+    public void deleteSession(Session session) {
         sessionRepository.deleteSession(session);
     }
 
-    public List<Session> getAll (){
-       return sessionRepository.getSessionsRepository();
+    public List<Session> getAll() {
+        return sessionRepository.getSessionsRepository();
     }
-
 
     public Session getSessionByToken(String token) {
-       return sessionRepository.getSessionByToken(token);
+        return sessionRepository.getSessionByToken(token);
     }
 
-    public String getUserNameByToken (String token){
-      return   sessionRepository.getUserNameByToken(token);
+    public String getUserNameByToken(String token) {
+        return sessionRepository.getUserNameByToken(token);
     }
 
 
-    public boolean checkSessionByToken(String token) {
-       return sessionRepository.checkSessionByToken(token);
-    }
 }

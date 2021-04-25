@@ -1,7 +1,8 @@
 package ru.netology.diplom.exeption;
 
-public class ErrorInputData extends RuntimeException {
 //400
+public class ErrorInputData extends RuntimeException {
+
     public ErrorInputData(String msg) {
         super(msg);
 
