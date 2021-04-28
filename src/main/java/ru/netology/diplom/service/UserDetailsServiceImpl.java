@@ -17,10 +17,11 @@ import ru.netology.diplom.repository.UserRepository;
 //ищем пр login
 @Service
 @Component
-@RequiredArgsConstructor
+
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-   private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     @Transactional

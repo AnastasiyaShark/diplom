@@ -31,8 +31,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-    public String directoryName = "diplom/src/main/resources/img/";
-    public String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
+    public String directoryName = "src/main/resources/img/";
+
 
     private final FileRepository fileRepository;
     private final SessionService sessionService;
@@ -52,6 +52,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public void upload(MultipartFile file, HttpServletRequest request) {
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
         String generatedName = date + file.getOriginalFilename();
         try {
             Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
@@ -122,6 +123,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
         FileI newFile = file.get();
         newFile.setOriginalName(name.getFilename());
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
         newFile.setGeneratedName(date + name.getFilename());
         fileRepository.save(newFile);
 
