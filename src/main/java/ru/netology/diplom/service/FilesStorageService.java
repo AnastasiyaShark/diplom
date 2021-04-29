@@ -14,11 +14,11 @@ public interface FilesStorageService {
 
     void upload(MultipartFile file, HttpServletRequest request);
 
-    void delete(String fileName);
+    void delete(String fileName,HttpServletRequest request);
 
-    Path load(String fileName);
+    Path load(String fileName,HttpServletRequest request);
 
-    void changeFileName(String fileName, RequestNewName name);
+    void changeFileName(String fileName, RequestNewName name,HttpServletRequest request);
 
     List<ListResponse> getAll(int limit, HttpServletRequest request);
 

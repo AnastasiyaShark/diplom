@@ -9,7 +9,7 @@ import ru.netology.diplom.model.FileI;
 
 import java.util.Optional;
 
-@Component
+
 @Repository
 public interface FileRepository extends JpaRepository<FileI, Integer> {
 

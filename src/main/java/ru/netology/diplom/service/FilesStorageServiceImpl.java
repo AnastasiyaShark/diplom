@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.diplom.exeption.ErrorInputData;
+import ru.netology.diplom.exeption.ErrorUnauthorized;
 import ru.netology.diplom.model.FileI;
 import ru.netology.diplom.model.ListResponse;
 import ru.netology.diplom.model.RequestNewName;
@@ -98,9 +99,22 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
 
-    @Override
-    public void delete(String fileName) {
+    public boolean chekSession (HttpServletRequest request,String fileName){
+        String authHeader = request.getHeader("auth-token");
+        String newAuthHeader = authHeader.replace("Bearer ", "");
+        String userName = sessionService.getUserNameByToken(newAuthHeader);
 
+        FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
+        return userName.equals(fileI.getUsersLogin());
+    }
+
+
+    @Override
+    public void delete(String fileName,HttpServletRequest request) {
+
+        if (!chekSession(request,fileName)){
+            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+        }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
 
         deleteFileFromFolder(fileI.getPath() + fileName);
@@ -109,15 +123,21 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Path load(String fileName) {
+    public Path load(String fileName,HttpServletRequest request) {
+        if (!chekSession(request,fileName)){
+            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+        }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
-        Path path = Paths.get(fileI.getPath() + fileI.getGeneratedName());
-        return path;
+        return Paths.get(fileI.getPath() + fileI.getGeneratedName());
     }
 
 
     @Override
-    public void changeFileName(String fileName, RequestNewName name) {
+    public void changeFileName(String fileName, RequestNewName name,HttpServletRequest request) {
+
+        if (!chekSession(request,fileName)){
+            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+        }
         Optional<FileI> file = fileRepository.findFileByGeneratedName(fileName);
         String oldPath = file.get().getPath() + file.get().getGeneratedName();
 

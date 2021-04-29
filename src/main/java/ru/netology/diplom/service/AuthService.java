@@ -36,15 +36,12 @@ public class AuthService {
 
     public JwtResponse authenticateUser(LoginForm loginRequest) {
         //конвертирует user'a
-        System.out.println("2");
-        System.out.println(loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getLogin(),
                         loginRequest.getPassword()
                 )
         );
-        System.out.println("3");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //получаем токен
         String jwt = jwtProvider.generateJwtToken(authentication);

@@ -50,17 +50,19 @@ public class FileController {
 
 
     @DeleteMapping("/file")
-    public ResponseEntity deleteFile(@RequestParam("filename") String filename) {
+    public ResponseEntity deleteFile(@RequestParam("filename") String filename,
+                                     HttpServletRequest request) {
 
-        storageService.delete(filename);
+        storageService.delete(filename,request);
         return ResponseEntity.ok().body("Success deleted");
     }
 
 
     @GetMapping("/file")
-    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String fileName) throws IOException {
+    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String fileName,
+                                                 HttpServletRequest request) throws IOException {
 
-        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(storageService.load(fileName)));
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(storageService.load(fileName,request)));
 
         return ResponseEntity.ok()
                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -70,8 +72,9 @@ public class FileController {
 
     @PutMapping("/file")
     public ResponseEntity edit(@RequestParam("filename") String fileName,
-                               @RequestBody RequestNewName newName) {
-        storageService.changeFileName(fileName, newName);
+                               @RequestBody RequestNewName newName,
+                               HttpServletRequest request) {
+        storageService.changeFileName(fileName, newName,request);
         return ResponseEntity.ok().body("Success upload");
     }
 

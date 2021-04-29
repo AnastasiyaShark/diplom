@@ -35,7 +35,6 @@ private final AuthService authService;
 
     @PostMapping("/login")
     public JwtResponse authenticateUser(@RequestBody LoginForm loginRequest) {
-        System.out.println("1");
        return authService.authenticateUser(loginRequest);
     }
 

@@ -7,7 +7,7 @@ import ru.netology.diplom.model.User;
 
 import java.util.Optional;
 
-@Component
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
