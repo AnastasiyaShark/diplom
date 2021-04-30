@@ -36,14 +36,6 @@ public class SessionRepository {
         sessionsRepository.remove(session);
     }
 
-    public boolean checkSessionByToken(String token) {
-        for (Session session : sessionsRepository) {
-            if (session.getToken().equals(token)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public String getLoginByToken(String token) {
         for (Session session : sessionsRepository) {

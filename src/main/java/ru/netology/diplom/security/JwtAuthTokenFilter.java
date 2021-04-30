@@ -64,14 +64,3 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 }
 
 
-//деактивирует фильтр
-//    private static final String LOGIN_URL = "/login";
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//        String requestPath = request.getRequestURI();
-//        System.out.println(requestPath);
-//        if (LOGIN_URL.equals(requestPath)) {
-//            return true;
-//        }
-//        return false;
-//    }

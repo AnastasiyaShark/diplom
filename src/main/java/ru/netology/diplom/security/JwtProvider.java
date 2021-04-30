@@ -20,7 +20,7 @@ public class JwtProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private static final String key = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 
-    private final SessionService sessionService;
+//    private final SessionService sessionService;
 
     // /login
     //сгенерировать токен JWT

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ListResponse {
+
     @JsonProperty("filename")
     private String fileName;
     @JsonProperty(value = "size", required = true)
