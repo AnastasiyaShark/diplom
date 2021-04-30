@@ -103,12 +103,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void delete(String fileName, HttpServletRequest request) {
 
-        if (!sessionService.chekSession(request, fileName)) {
-            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
-        }
+//        if (!sessionService.chekSession(request, fileName)) {
+//            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+//        }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
 
-        deleteFileFromFolder(fileI.getPath() + fileName);
+//        sessionService.deleteFileFromFolder(fileI.getPath() + fileName);
         fileRepository.deleteFileByGeneratedName(fileName);
 
     }
@@ -143,15 +143,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
 
 
-    public void deleteFileFromFolder(String path) {
 
-        File file = new File((path));
-        if (file.exists()) {
-            file.delete();
-        } else {
-            throw new ErrorInputData("File " + path + "does not exist");
-        }
-    }
 
 
 }

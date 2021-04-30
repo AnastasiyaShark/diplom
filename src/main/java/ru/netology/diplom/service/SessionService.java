@@ -2,6 +2,7 @@ package ru.netology.diplom.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.netology.diplom.exeption.ErrorInputData;
 import ru.netology.diplom.model.FileI;
@@ -18,13 +19,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
+
 public class SessionService {
 
-    private final SessionRepository sessionRepository;
-private final FileRepository fileRepository;
+    SessionRepository sessionRepository;
 
-    public boolean chekSession (HttpServletRequest request, String fileName){
+     FileRepository fileRepository;
+
+    public SessionService(SessionRepository sessionRepository, FileRepository fileRepository) {
+        this.sessionRepository = sessionRepository;
+        this.fileRepository = fileRepository;
+    }
+
+    public boolean chekSession(HttpServletRequest request, String fileName) {
         String authHeader = request.getHeader("auth-token");
         String newAuthHeader = authHeader.replace("Bearer ", "");
         String userName = getUserNameByToken(newAuthHeader);
@@ -53,6 +60,16 @@ private final FileRepository fileRepository;
         newFile.setGeneratedName(date + name.getFilename());
 
         return newFile;
+    }
+
+    public void deleteFileFromFolder(String path) {
+
+        File file = new File((path));
+        if (file.exists()) {
+            file.delete();
+        } else {
+            throw new ErrorInputData("File " + path + "does not exist");
+        }
     }
 
 
