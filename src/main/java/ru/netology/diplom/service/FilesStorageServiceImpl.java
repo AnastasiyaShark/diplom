@@ -107,7 +107,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 //            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
 //        }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
-
 //        sessionService.deleteFileFromFolder(fileI.getPath() + fileName);
         fileRepository.deleteFileByGeneratedName(fileName);
 
