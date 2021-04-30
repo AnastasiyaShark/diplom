@@ -3,16 +3,57 @@ package ru.netology.diplom.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.netology.diplom.exeption.ErrorInputData;
+import ru.netology.diplom.model.FileI;
+import ru.netology.diplom.model.RequestNewName;
 import ru.netology.diplom.model.Session;
+import ru.netology.diplom.repository.FileRepository;
 import ru.netology.diplom.repository.SessionRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+private final FileRepository fileRepository;
+
+    public boolean chekSession (HttpServletRequest request, String fileName){
+        String authHeader = request.getHeader("auth-token");
+        String newAuthHeader = authHeader.replace("Bearer ", "");
+        String userName = getUserNameByToken(newAuthHeader);
+
+        FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
+        return userName.equals(fileI.getUsersLogin());
+    }
+
+    public void renameFileInFolder(String oldPath, String newPath) {
+
+        File file = new File(oldPath);
+        if (file.exists()) {
+            file.renameTo(new File(newPath));
+        } else {
+            throw new ErrorInputData("File " + oldPath + "does not exist");
+        }
+    }
+
+    public FileI newFile(String fileName, RequestNewName name) {
+
+        Optional<FileI> file = fileRepository.findFileByGeneratedName(fileName);
+
+        FileI newFile = file.get();
+        newFile.setOriginalName(name.getFilename());
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
+        newFile.setGeneratedName(date + name.getFilename());
+
+        return newFile;
+    }
 
 
     public String getLoginByToken(String token) {

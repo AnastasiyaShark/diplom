@@ -1,8 +1,12 @@
 package ru.netology.diplom.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.netology.diplom.model.FileI;
 import ru.netology.diplom.model.Session;
+import ru.netology.diplom.service.SessionService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Vector;
 
@@ -10,6 +14,8 @@ import java.util.Vector;
 public class SessionRepository {
 
     private final List<Session> sessionsRepository;
+
+
 
     public SessionRepository() {
         this.sessionsRepository = new Vector<>();
@@ -54,6 +60,9 @@ public class SessionRepository {
         }
         return null;
     }
+
+
+
 
     public String getUserNameByToken(String token) {
         for (Session session : sessionsRepository) {

@@ -70,8 +70,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
 
     //компоновка и сохранение файла в бд
-    public void linkingAndSavingFile(String originalName, String generatedName, String path,
-                                     int size, String userLogin) {
+    public boolean linkingAndSavingFile(String originalName, String generatedName, String path,
+                                        int size, String userLogin) {
         FileI newFile = new FileI();
         newFile.setOriginalName(originalName);
         newFile.setGeneratedName(generatedName);
@@ -79,6 +79,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         newFile.setSize(size);
         newFile.setUsersLogin(userLogin);
         fileRepository.save(newFile);
+        return true;
     }
 
 
@@ -99,20 +100,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
 
-    public boolean chekSession (HttpServletRequest request,String fileName){
-        String authHeader = request.getHeader("auth-token");
-        String newAuthHeader = authHeader.replace("Bearer ", "");
-        String userName = sessionService.getUserNameByToken(newAuthHeader);
-
-        FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
-        return userName.equals(fileI.getUsersLogin());
-    }
-
-
     @Override
-    public void delete(String fileName,HttpServletRequest request) {
+    public void delete(String fileName, HttpServletRequest request) {
 
-        if (!chekSession(request,fileName)){
+        if (!sessionService.chekSession(request, fileName)) {
             throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
         }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
@@ -123,8 +114,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Path load(String fileName,HttpServletRequest request) {
-        if (!chekSession(request,fileName)){
+    public Path load(String fileName, HttpServletRequest request) {
+        if (!sessionService.chekSession(request, fileName)) {
             throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
         }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
@@ -133,27 +124,24 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
 
     @Override
-    public void changeFileName(String fileName, RequestNewName name,HttpServletRequest request) {
+    public void changeFileName(String fileName, RequestNewName name, HttpServletRequest request) {
 
-        if (!chekSession(request,fileName)){
-            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
-        }
-        Optional<FileI> file = fileRepository.findFileByGeneratedName(fileName);
-        String oldPath = file.get().getPath() + file.get().getGeneratedName();
+//        if (!sessionService.chekSession(request, fileName)) {
+//            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+//        }
+        FileI oldFile = fileRepository.findFileIByGeneratedName(fileName);
+        String oldPath = oldFile.getPath() + oldFile.getGeneratedName();
+        FileI newFile = sessionService.newFile(fileName, name);
 
-        FileI newFile = file.get();
-        newFile.setOriginalName(name.getFilename());
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
-        newFile.setGeneratedName(date + name.getFilename());
         fileRepository.save(newFile);
-
         String newPath = newFile.getPath() + newFile.getGeneratedName();
-        renameFileInFolder(oldPath, newPath);
+        sessionService.renameFileInFolder(oldPath, newPath);
 
         fileRepository.deleteFileByGeneratedName(fileName);
-
-
     }
+
+
+
 
     public void deleteFileFromFolder(String path) {
 
@@ -165,13 +153,5 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    public void renameFileInFolder(String oldPath, String newPath) {
 
-        File file = new File(oldPath);
-        if (file.exists()) {
-            file.renameTo(new File(newPath));
-        } else {
-            throw new ErrorInputData("File " + oldPath + "does not exist");
-        }
-    }
 }
