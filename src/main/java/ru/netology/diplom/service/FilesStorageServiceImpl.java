@@ -55,17 +55,23 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     public void upload(MultipartFile file, HttpServletRequest request) {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss-"));
         String generatedName = date + file.getOriginalFilename();
-        try {
-            Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) {
-            throw new ErrorInputData("Error input data");
-        }
 
+        copyFile(file, generatedName);
         String authHeader = request.getHeader("auth-token");
         String newAuthHeader = authHeader.replace("Bearer ", "");
 
         linkingAndSavingFile(file.getOriginalFilename(), generatedName, directoryName, (int) file.getSize(),
                 sessionService.getLoginByToken(newAuthHeader));
+    }
+
+    public boolean copyFile(MultipartFile file, String generatedName) {
+
+        try {
+            Files.copy(file.getInputStream(), Paths.get(directoryName + generatedName), StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new ErrorInputData("Error input data");
+        }
+        return true;
     }
 
 
@@ -114,9 +120,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public Path load(String fileName, HttpServletRequest request) {
-        if (!sessionService.chekSession(request, fileName)) {
-            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
-        }
+//        if (!sessionService.chekSession(request, fileName)) {
+//            throw new ErrorUnauthorized("Unauthorized error.You are not authorized!");
+//        }
         FileI fileI = fileRepository.findFileIByGeneratedName(fileName);
         return Paths.get(fileI.getPath() + fileI.getGeneratedName());
     }
@@ -138,11 +144,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
         fileRepository.deleteFileByGeneratedName(fileName);
     }
-
-
-
-
-
 
 
 }
