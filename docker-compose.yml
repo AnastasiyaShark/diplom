@@ -10,11 +10,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: D_DB
+#      PGPORT: 5432
     ports:
       - 5432:5432
   app:
-#    image: docker-spring-boot-postgres:latest
-#    restart: always
     container_name: d_backend
     build: ./
     ports:
@@ -24,5 +23,6 @@ services:
     environment:
       DB_PORT: 5432
       DB_HOST: d_database
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://pg_db:5432/D_DB
       DB_USER: postgres
       DB_PASS: 123
