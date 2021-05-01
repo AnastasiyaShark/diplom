@@ -16,10 +16,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import ru.netology.diplom.model.FileI;
 import ru.netology.diplom.model.RequestNewName;
 
-import ru.netology.diplom.model.User;
 import ru.netology.diplom.repository.FileRepository;
 
-import ru.netology.diplom.repository.UserRepository;
+
 import ru.netology.diplom.service.FilesStorageServiceImpl;
 import ru.netology.diplom.service.SessionService;
 
@@ -34,8 +33,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.*;
 

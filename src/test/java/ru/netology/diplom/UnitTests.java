@@ -16,13 +16,13 @@ import static org.junit.Assert.assertNull;
 public class UnitTests {
 
 
-    private final static String login = "User2";
-    private final static String password = "password2";
-    private final static String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyMiJ9.VEgjm0RsXKBEmxxh6rZ5tFaHDZCT" +
+    private static final String login = "User2";
+    private static final String password = "password2";
+    private static final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyMiJ9.VEgjm0RsXKBEmxxh6rZ5tFaHDZCT" +
             "sddIhwofdkr4C4hy5g43t1MWHCCwQZ21woIkzQuus66dpMs_jImF5CeuVQ";
-    private final static Session session = new Session(login, token);
-    private final static String fileName = "image.jpg";
-    private final static int size = 1256;
+    private static final Session session = new Session(login, token);
+    private static final String fileName = "image.jpg";
+    private static final int size = 1256;
 
     @Test
     public void testDeSerializingWithJsonCreatorJwtResponse() throws IOException {
